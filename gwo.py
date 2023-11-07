@@ -91,7 +91,7 @@ def plot_rastrigin(gwo_solutions=None):
         for gwo_solution in gwo_solutions:
             ax.scatter(gwo_solution[0], gwo_solution[1], gwo_solution[2], marker='*', color='red', s=100)
 
-    plt.savefig('rastrigin_graph2.pdf')
+    plt.savefig('rastrigin_graph6.pdf')
     plt.show()
 
 
@@ -136,7 +136,7 @@ def run_gwo_different_sizes():
         print("Setting max_iter    = " + str(max_iter))
         print("\nStarting GWO algorithm\n")
 
-        best_position = gwo(fitness, max_iter, pop, dim, -10.0, 10.0)
+        best_position = gwo(fitness, max_iter, pop, dim, -5.12, 5.12)
 
         print("\nGWO completed\n")
         print("\nBest solution found:")
@@ -158,7 +158,7 @@ def run_gwo_different_sizes():
     #make a plot of the fitness vs population size
     plt.plot(populations, computed_fitness)
     plt.xticks(populations)
-    plt.yticks(np.arange(-6, 6, 1))
+    plt.yticks(np.arange(-3, 10, 1))
     plt.xlabel("Population Size")
     plt.ylabel("Fitness")
     plt.title("Fitness vs Population Size")
