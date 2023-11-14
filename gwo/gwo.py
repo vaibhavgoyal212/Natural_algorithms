@@ -8,6 +8,7 @@ import time
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
+import os
 
 
 def fitness_rastrigin(position):
@@ -73,7 +74,7 @@ def gwo(fitness, max_iteration, pop, dim, minx, maxx):
     return alpha.position
 
 
-def plot_rastrigin(gwo_solutions=None):
+def plot_rastrigin(gwo_solutions=None, names=None):
     X = np.linspace(-5.12, 5.12, 100)
     Y = np.linspace(-5.12, 5.12, 100)
     X, Y = np.meshgrid(X, Y)
@@ -87,18 +88,22 @@ def plot_rastrigin(gwo_solutions=None):
                     cmap=cm.coolwarm, linewidth=0.08,
                     antialiased=True)
     # plot the gwo solution
-    #rotate the graph
+    # rotate the graph
     ax.view_init(90, 0)
     if gwo_solutions is not None:
         for gwo_solution in gwo_solutions:
             ax.scatter(gwo_solution[0], gwo_solution[1], gwo_solution[2], marker='*', color='red', s=100)
-
-    plt.savefig('rastrigin_graph6.pdf')
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs")
+    if names is None:
+        plt.savefig('outputs/rastrigin.pdf')
+    else:
+        plt.savefig(f'outputs/{names}.pdf')
     plt.show()
 
 
 # plot the contour of the rastrigin function
-def plot_rastrigin_contour(gwo_solutions=None):
+def plot_rastrigin_contour(gwo_solutions=None, names=None):
     X = np.linspace(-5.12, 5.12, 100)
     Y = np.linspace(-5.12, 5.12, 100)
     X, Y = np.meshgrid(X, Y)
@@ -110,8 +115,12 @@ def plot_rastrigin_contour(gwo_solutions=None):
     if gwo_solutions is not None:
         for gwo_solution in gwo_solutions:
             plt.plot(gwo_solution[0], gwo_solution[1], marker='*', color='red', markersize=8)
-
-    plt.savefig('rastrigin_contour.pdf')
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs")
+    if names is None:
+        plt.savefig('outputs/rastrigin_contour.pdf')
+    else:
+        plt.savefig(f'outputs/rastrigin_contour_{names}.pdf')
     plt.show()
 
 
@@ -128,7 +137,7 @@ def run_gwo_different_sizes():
     for i in range(dim - 1):
         print("0, ", end="")
     print("0)")
-    populations = [5,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+    populations = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
     computed_solutions = []
     computed_fitness = []
     for pop in populations:
@@ -150,14 +159,13 @@ def run_gwo_different_sizes():
 
         print("\nEnd GWO for rastrigin\n")
 
-    #save population size, fitness and solutions to a csv file
+    # save population size, fitness and solutions to a csv file
     with open('outputs/gwo_rastrigin.csv', 'w') as f:
         f.write("population,fitness,solution\n")
         for i in range(len(populations)):
             f.write(str(populations[i]) + "," + str(computed_fitness[i]) + "," + str(computed_solutions[i]) + "\n")
 
-
-    #make a plot of the fitness vs population size
+    # make a plot of the fitness vs population size
     plt.plot(populations, computed_fitness)
     plt.xticks(populations)
     plt.yticks(np.arange(-3, 10, 1))
@@ -197,7 +205,7 @@ def run_gwo(dim, populations=[15, 20, 25, 30, 35, 40, 45, 50, 55, 60], max_iter=
 
         print("\nEnd GWO for rastrigin\n")
 
-    #pretty print the results
+    # pretty print the results
     print("Population size\tFitness\tSolution")
     for i in range(len(populations)):
         if math.isclose(computed_fitness[i], 0.0, abs_tol=1e-10):
@@ -225,4 +233,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

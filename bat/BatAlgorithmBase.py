@@ -1,6 +1,8 @@
 import random
 import numpy as np
 import math
+from scipy.stats import levy_stable
+
 
 class BatAlgorithm():
     def __init__(self, D, NP, N_Gen, A, r, Qmin, Qmax, Lower, Upper, function):
@@ -63,8 +65,10 @@ class BatAlgorithm():
         self.init_bat()
         #linearly reduce A and increase r over iterations
         for t in range(self.N_Gen):
-            self.A = self.A * 0.9
-            self.r = 0.1 * (1 - math.exp(-0.5 * t))
+            self.A = self.A - 0.007*t
+            self.r = 0.25 * (1 - math.exp(-0.5 * t))
+            #add levy flight
+            levy = levy_stable.rvs(1.0, 1, 0, 0.01, size=self.D)
             for i in range(self.NP):
                 rnd = np.random.uniform(0, 1)
                 self.Q[i] = self.Qmin + (self.Qmax - self.Qmin) * rnd
@@ -80,7 +84,7 @@ class BatAlgorithm():
 
                 if rnd > self.r:
                     for j in range(self.D):
-                        S[i][j] = self.best[j] + 0.001 * random.gauss(0, 1)
+                        S[i][j] = self.best[j] + levy[j]
                         S[i][j] = self.simplebounds(S[i][j], self.Lb[j],
                                                     self.Ub[j])
 
