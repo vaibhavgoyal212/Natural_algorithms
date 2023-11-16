@@ -140,7 +140,7 @@ def plot_fitness(filename, generations, generation_best_fitnesses):
     plt.show()
 
 
-def genetic_algorithm(problem, generations, population_size, mutation_rate, xo_point_rate, fitness_function):
+def genetic_algorithm(problem, generations, population_size, mutation_rate, xo_point_rate, fitness_function, graphing=True):
     matrix, row_sums, col_sums = problem
     population = init_population(population_size, len(matrix))
     best_fitness_overall = 0
@@ -175,7 +175,8 @@ def genetic_algorithm(problem, generations, population_size, mutation_rate, xo_p
             pretty_print(matrix, row_sums, col_sums)
             print("generation:", gen)
             print("solution:", best_solution)
-            plot_fitness(f"fitness_{fitness_function}_{len(matrix)}_matrix", gen, generation_best_fitnesses)
+            if graphing:
+                plot_fitness(f"fitness_{fitness_function}_{len(matrix)}_matrix", gen, generation_best_fitnesses)
             return best_solution, gen
 
         population = get_new_population(problem,population, fitnesses, mutation_rate, xo_point_rate, fitness_function)
@@ -184,7 +185,8 @@ def genetic_algorithm(problem, generations, population_size, mutation_rate, xo_p
     print("Solution not found", "\n")
     print("best fitness:", best_fitness_overall, "in generation:", best_generation, "\n")
     print("best solution:", best_solution)
-    plot_fitness("fitness_dynamic", generations, generation_best_fitnesses)
+    if graphing:
+        plot_fitness("fitness_dynamic", generations, generation_best_fitnesses)
     return None, generations
 
 
